@@ -1,1 +1,1 @@
-Test
+Get hasilnya collection dari instance model, first hasilnya instance dari model
