@@ -1,1 +1,8 @@
 Get hasilnya collection dari instance model, first hasilnya instance dari model
+#query error karna group by, ganti value strict jadi false di drive mysql
+
+extension xml php
+https://stackoverflow.com/questions/6384979/how-to-enable-xmlwriter-after-php-having-been-compiled
+
+sweetalert laravel
+https://github.com/realrashid/sweet-alert
