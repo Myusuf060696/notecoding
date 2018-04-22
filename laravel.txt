@@ -6,3 +6,6 @@ https://stackoverflow.com/questions/6384979/how-to-enable-xmlwriter-after-php-ha
 
 sweetalert laravel
 https://github.com/realrashid/sweet-alert
+
+ganti remote url git 
+https://help.github.com/articles/changing-a-remote-s-url/
