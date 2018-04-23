@@ -1,4 +1,5 @@
-Get hasilnya collection dari instance model, first hasilnya instance dari model
+#Get hasilnya collection dari instance model, first hasilnya instance dari model
+
 #query error karna group by, ganti value strict jadi false di drive mysql
 
 extension xml php
@@ -9,3 +10,13 @@ https://github.com/realrashid/sweet-alert
 
 ganti remote url git 
 https://help.github.com/articles/changing-a-remote-s-url/
+
+cascade soft deletes
+dalam skenario kalau perusahaan dihapus, mengakibatkan error dari pekerjaan, walaupun sudah menggunakan softdeletes 
+
+belajar markdown
+
+softdelete child delete, or foreign key delete
+https://medium.com/teknomuslim/soft-deleting-parent-child-models-in-eloquent-laravel-5-dc05a29133bf
+
+
