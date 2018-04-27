@@ -18,5 +18,34 @@ belajar markdown
 
 softdelete child delete, or foreign key delete
 https://medium.com/teknomuslim/soft-deleting-parent-child-models-in-eloquent-laravel-5-dc05a29133bf
+protected static function boot()
+    {
+      parent::boot();
+
+      static::deleting(function($companies) {
+         foreach ($companies->jobs()->get() as $jobs) {
+            $jobs->delete();
+         }
+      });
+    }
+
+#aturan membuat field foreign key laravel
+Untuk membuat relasi ini, Laravel memiliki struktur penamaan field yang sama dengan relasi one-
+to-one . Dimana kita harus membuat field dengan nama model_id pada table yang direlasikan.
+Disini, kita harus membuat field studio_id pada table movies .
+
+https://medium.com/@ocittwo/membangun-web-api-dengan-lumen-5-3-part-1-d6a3522772a4
+
+
+user ada lokasi 
+education ada lokasi 
+job record, kurang lokasi, jenis,  dan gaji
+
+http://creativegamastudio.com/web/produk-140-sms-quick-count--sms-pilkada--sms-real-count--sms-poling.html
+Aplikasi SMS Quick Count
+
+php artisan route:cache
+php artisan config:cache
+php artisan optimize // its not working
 
 
