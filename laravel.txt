@@ -48,4 +48,259 @@ php artisan route:cache
 php artisan config:cache
 php artisan optimize // its not working
 
+cek auth
+Auth::guard('company')
+https://laracasts.com/discuss/channels/laravel/what-does-authguard-mean?page=0
 
+https://pusher.com/tutorials/realtime-chart-laravel/
+
+tambah perintah alias di zsh
+sudo nano ~/.zshrc 
+tambah alias dan perintahnya apa
+
+
+https://www.youtube.com/watch?v=6QdfbY4jACw
+tentang quickcount
+http://konsultan-politik.blogspot.co.id/p/blog-page_5091.html
+
+https://www.youtube.com/watch?v=itZq9ukZZZg
+
+https://news.detik.com/pemilu/d-1104340/cara-menghitung-perolehan-kursi-parpol-di-dpr-dan-dprd
+
+
+ambil semua nama field di tabel
+http://www.expertphp.in/article/how-to-get-table-name-and-table-column-names-from-model-in-laravel-5
+
+
+https://www.cloudways.com/blog/laravel/
+
+contoh2 dengan vue 
+https://vuejsexamples.com/
+
+https://azishapidin.com/blog/membuat-autentikasi-api-sederhana-di-laravel/
+
+#api laravel dengan passport
+https://www.codepolitan.com/api-otentikasi-menggunakan-passport-laravel-59fc1153796b9
+https://medium.com/techcompose/create-rest-api-in-laravel-with-authentication-using-passport-133a1678a876
+https://laravelcode.com/
+
+https://stackoverflow.com/questions/25031736/laravel4-the-requested-resource-admin-was-not-found-on-this-server
+
+Model::
+
+  /*Select*/
+  select('col1','col2')
+  ->select(array('col1','col2'))
+  ->select(DB::raw('businesses.*, COUNT(reviews.id) as no_of_ratings, IFNULL(sum(reviews.score),0) as rating'))  
+  ->addSelect('col3','col4')
+  ->distinct() // distinct select
+  
+  /*From*/
+  ->from('table')
+  ->from(DB::raw('table, (select @n :=0) dummy'))
+  ->from(DB::raw("({$subQuery->toSql()}) T ")->mergeBindings($subQuery->getQuery())
+
+  
+  /*Query*/
+  ->where('column','value')
+  ->where('column','LIKE','%'.$value.'%')
+  ->where(function ($query) {
+  	$query->where('a', '=', 1)
+    	->orWhere('b', '=', 1);
+  })
+  ->orWhere('column','!=', 'value')
+  ->whereRaw('age > ? and votes = 100', array(25))
+  
+  ->whereRaw(DB::raw("id in (select city_id from addresses GROUP BY addresses.city_id)"))
+  
+  ->whereExists(function($query)
+  {
+  	$query->select(DB::raw(1))
+        ->from('business_language')
+        ->whereRaw('business_language.language_id = languages.id')
+        ->groupBy('business_language.language_id')
+        ->havingRaw("COUNT(*) > 0");
+  })
+  ->orWhereExists()
+  ->whereNotExists()
+  ->orWhereNotExists()
+  
+  ->whereIn('column',[1,2,3])
+  ->orWhereIn()
+  ->whereNotIn('id', function($query){
+    $query->select('city_id')
+    ->from('addresses')
+    ->groupBy('addresses.city_id');
+  })
+  ->whereNotIn()
+  ->orWhereNotIn
+  
+  ->whereNull('column') //where `column` is null
+  ->orWhereNull('column') //or where `column` is null
+  ->whereNotNull('column')  //where `column` is not null 
+  ->orWhereNotNull('column')  //or where `column` is not null 
+  
+  ->whereDay()
+  ->whereMonth('column', '=', 1) //
+  ->whereYear('column', '>', 2000) //uses sql YEAR() function on 'column'
+  ->whereDate('column', '>', '2000-01-01')
+  
+  /*Joins*/
+  ->join('business_category','business_category.business_id','=','businesses.id')
+  ->leftJoin('reviews','reviews.business_id', '=', 'businesses.id')
+  ->join('business_category',function($join) use($cats) {
+    $join->on('business_category.business_id', '=', 'businesses.id')
+    ->on('business_category.id', '=', $cats, 'and', true);
+  })
+  ->join(DB::raw('(SELECT *, ROUND(AVG(rating),2) avg FROM reviews WHERE rating!=0 GROUP BY item_id ) T' ), function($join){
+  	$join->on('genre_relation.movie_id', '=', 'T.id')
+  })
+  
+  /*Eager Loading */
+  ->with('table1','table2')
+  ->with(array('table1','table2','table1.nestedtable3'))
+  ->with(array('posts' => function($query) use($name){
+    $query->where('title', 'like', '%'.$name.'%')
+      ->orderBy('created_at', 'desc');
+  }))
+  
+  
+  /*Grouping*/
+  ->groupBy('state_id','locality')
+  ->havingRaw('count > 1 ')
+  ->having('items.name','LIKE',"%$keyword%")
+  ->orHavingRaw('brand LIKE ?',array("%$keyword%"))
+				
+  /*Cache*/
+  ->remember($minutes)
+  ->rememberForever()
+    
+  /*Offset & Limit*/
+  ->take(10)
+  ->limit(10)
+  ->skip(10)
+  ->offset(10)
+  ->forPage($pageNo, $perPage)
+  
+  /*Order*/
+  ->orderBy('id','DESC')
+  ->orderBy(DB::raw('RAND()'))
+  ->orderByRaw('type = ? , type = ? ', array('published','draft'))
+  ->latest() // on 'created_at' column
+  ->latest('column')
+  ->oldest() // on 'created_at' column
+  ->oldest('column')
+  
+  /*Create*/
+  ->insert(array('email' => 'john@example.com', 'votes' => 0))
+  ->insert(array(   
+    array('email' => 'taylor@example.com', 'votes' => 0),
+    array('email' => 'dayle@example.com', 'votes' => 0)
+  )) //batch insert
+  ->insertGetId(array('email' => 'john@example.com', 'votes' => 0)) //insert and return id
+  
+  /*Update*/
+  ->update(array('email' => 'john@example.com'))
+  ->update(array('column' => DB::raw('NULL')))
+  ->increment('column')
+  ->decrement('column')
+  ->touch() //update timestamp
+  
+  /*Delete*/
+  ->delete()
+  ->forceDelete() // when softdeletes enabled
+  ->destroy($ids) // delete by array of primary keys
+  ->roles()->detach() //delete from pivot table: associated by 'belongsToMany'
+  
+  
+  /*Getters*/
+  ->find($id)
+  ->find($id, array('col1','col2'))
+  ->findOrFail($id)
+  ->findMany($ids, $columns)
+  ->first(array('col1','col2'))
+  ->firstOrFail()
+  ->all()
+  ->get()
+  ->get(array('col1','col2')) 
+  ->getFresh() // no caching
+  ->getCached() // get cached result
+  ->chunk(1000, function($rows){
+  	$rows->each(function($row){
+  		
+  	});
+  })
+  ->lists('column') // numeric index
+  ->lists('column','id') // 'id' column as index
+  ->lists('column')->implode('column', ',') // comma separated values of a column
+  ->pluck('column')  //Pluck a single column's value from the first result of a query.
+  ->value('column')  //Get a single column's value from the first result of a query.
+  
+  /*Paginated results*/
+  ->paginate(10)
+  ->paginate(10, array('col1','col2'))
+  ->simplePaginate(10)
+  ->getPaginationCount() //get total no of records
+  
+  /*Aggregate*/
+  ->count()
+  ->count('column')
+  ->count(DB::raw('distinct column'))
+  ->max('rating')
+  ->min('rating')
+  ->sum('rating')
+  ->avg('rating')
+  ->aggregate('sum', array('rating')) // use of aggregate functions
+  
+  /*Others*/
+  ->toSql() // output sql query
+  ->exists() // check if any row exists
+  ->fresh() // Return a fresh data for current model from database
+  
+  /*Object methods*/
+  ->toArray() //
+  ->toJson()
+  ->relationsToArray() //Get the model's relationships in array form.
+  ->implode('column', ',') // comma separated values of a column
+  ->isDirty()
+  ->getDirty() //Get the attributes that have been changed but not saved to DB
+  
+//Debugging
+DB::enableQueryLog();
+DB::getQueryLog();
+Model::where()->toSql() // output sql query
+
+https://gist.github.com/42antoine/8822851
+
+empty result 
+https://laracasts.com/discuss/channels/general-discussion/laravel-check-if-get-returned-anything?page=1
+https://stackoverflow.com/questions/20563166/eloquent-collection-counting-and-detect-empty
+
+Data Sekolah
+https://data.go.id/dataset/sekolah/resource/adbe82aa-8b08-4891-95b6-5c49e2184f5d
+
+https://blog.pusher.com/build-rest-api-laravel-api-resources/
+
+http://www.adiputra.web.id/membuat-variable-yang-bisa-diakses-di-semua-view-pada-laravel/
+
+https://learngitbranching.js.org/
+
+mysql sum dan count if
+http://webdevzoom.com/count-rows-fields-mysql-using-count-functions/
+http://centegicindia.com/
+
+i get problem with npm 
+first npm install 
+sudo apt-get install libpng-dev
+npm install --save laravel-echo pusher-js
+https://stackoverflow.com/questions/49308545/error-with-npm-update-pngquant-binary-does-not-seem-to-work-correctly
+
+https://www.kerneldev.com/2018/01/21/real-time-notifications-in-laravel-using-pusher/
+
+
+https://medium.com/@maheshkariya/firebase-admin-sdk-for-php-972d61d58d41
+https://laravelcode.com/post/laravel-56-realtime-crud-system-using-google-firebase
+
+
+9057
+50590
